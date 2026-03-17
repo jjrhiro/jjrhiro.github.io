@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script 
+src="https://cdn.prod.eu.five9.net/static/stable/chat/wrapper/index.js">
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Automation Sandbox</title>
@@ -230,9 +233,10 @@
 </head>
 <body>
 
+
     <!-- 1. Header & Navigation -->
     <header>
-        <h1>JR Test Sandbox</h1>
+        <h1>JR's Test Sandbox</h1>
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
@@ -242,6 +246,8 @@
             </ul>
         </nav>
     </header>
+
+
 
     <div class="container">
         <!-- 2. Login Form -->
@@ -430,6 +436,13 @@
 
         });
     </script>
+<script>
+  F9.Chat.Wrapper.init({
+    cdn: 'prod-eu',
+    integrationId: '14cca28b-cf64-464d-8a65-10e3b550e433',
+    chatDeploymentId : '88128dbf-e945-47a6-b12f-22872bee46aa'
+  });
+</script>
 
 </body>
 </html>
