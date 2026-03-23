@@ -1,451 +1,474 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script 
-src="https://cdn.prod.eu.five9.net/static/stable/chat/wrapper/index.js">
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JR's Sandbox</title>
-    <!-- CSS styles are embedded in the <style> tag -->
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
-            color: #333;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JR's Sandbox</title>
+  <!-- Five9 Wrapper -->
+  <script src="https://cdn.prod.eu.five9.net/static/stable/chat/wrapper/index.js"></script>
+  <!-- CSS styles -->
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f7f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 960px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    header {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      padding: 1rem 0;
+      text-align: center;
+      border-bottom: 4px solid #3498db;
+    }
+    header h1 { margin: 0; font-size: 2.5rem; }
+    nav ul {
+      padding: 0;
+      margin-top: 10px;
+      list-style: none;
+      text-align: center;
+    }
+    nav ul li { display: inline; margin-right: 20px; }
+    nav a {
+      text-decoration: none;
+      color: #ecf0f1;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: #3498db; }
+    section {
+      padding: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    section:last-of-type { border-bottom: none; }
+    h2 {
+      color: #3498db;
+      border-bottom: 2px solid #ecf0f1;
+      padding-bottom: 10px;
+    }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .form-group input[type="checkbox"] { margin-right: 10px; }
+    .btn {
+      display: inline-block;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      background-color: #3498db;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .btn:hover { background-color: #2980b9; }
+    .btn-secondary { background-color: #95a5a6; }
+    .btn-secondary:hover { background-color: #7f8c8d; }
+    #hiddenText {
+      display: none;
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #eaf6ff;
+      border: 1px solid #bddef6;
+      border-radius: 4px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .close-btn {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close-btn:hover, .close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    thead { background-color: #34495e; color: #ecf0f1; }
+    tbody tr:nth-child(even) { background-color: #f2f2f2; }
+    tbody tr:hover { background-color: #e2e8f0; }
+    #dynamicContentList { list-style: disc; padding-left: 20px; margin-top: 15px; }
+    #dynamicContentList li { padding: 5px 0; }
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 20px;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+    }
+  </style>
+  <!-- ========= HARD-CODED STUBS FOR SANDBOX (so Script 1 always runs) ========= -->
+  <script>
+    // 1) digitalData stub (Script 1 expects this)
+    window.digitalData = window.digitalData || [{
+      data: {
+        pageInfo: {
+          // ✅ Make sure these are NOT empty so the gate passes
+          companyCode: "GPS",         // try "GPU" / "GCB" / "GCA" etc.
+          language: "en",
+          // partner fields (can be blank; script will default)
+          partnerCompanySalesGroup: "",
+          partnerCompanyNielsenId: "",
+          partnerCompanySalesOffice: "",
+          partnerCompanyDivision: "",
+          // other fields used in prepopulatedFields
+          partnerCompanyId: "PCID_SANDBOX",
+          partnerCompanyName: "Partner Sandbox",
+          platform: "Web",
+          siteCountry: "SG"
+        },
+        user: {
+          puid: "PUID_SANDBOX"
         }
-
-        .container {
-            max-width: 960px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        /* Header & Navigation */
-        header {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 1rem 0;
-            text-align: center;
-            border-bottom: 4px solid #3498db;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-
-        nav ul {
-            padding: 0;
-            margin-top: 10px;
-            list-style: none;
-            text-align: center;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #ecf0f1;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #3498db;
-        }
-
-        /* Section Styling */
-        section {
-            padding: 20px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        section:last-of-type {
-            border-bottom: none;
-        }
-
-        h2 {
-            color: #3498db;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 10px;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="password"],
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* Important for padding and width */
-        }
-
-        .form-group input[type="checkbox"] {
-            margin-right: 10px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            color: #fff;
-            background-color: #3498db;
-            border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-secondary {
-            background-color: #95a5a6;
-        }
-
-        .btn-secondary:hover {
-            background-color: #7f8c8d;
-        }
-
-        /* Hidden Text */
-        #hiddenText {
-            display: none;
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #eaf6ff;
-            border: 1px solid #bddef6;
-            border-radius: 4px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .close-btn {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close-btn:hover,
-        .close-btn:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Data Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        thead {
-            background-color: #34495e;
-            color: #ecf0f1;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tbody tr:hover {
-            background-color: #e2e8f0;
-        }
-
-        /* Dynamic Content */
-        #dynamicContentList {
-            list-style: disc;
-            padding-left: 20px;
-            margin-top: 15px;
-        }
-        
-        #dynamicContentList li {
-            padding: 5px 0;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-        }
-    </style>
+      }
+    }];
+    // 2) Adobe Launch stub (Script 1 calls _satellite.getVar)
+    window._satellite = window._satellite || {
+      getVar: function (name) {
+        if (name === "aa_custvid_mcdID") return "mcdid_sandbox_";
+        return "";
+      }
+    };
+    // 3) CTF localization stub (Script 1 references window.CTF.FIVE9.*)
+    window.CTF = window.CTF || {};
+    window.CTF.FIVE9 = window.CTF.FIVE9 || {
+      formErrorInvalidEmail: "Please enter a valid email.",
+      headerText: "Chat with us",
+      inputPlaceholder: "Type your message...",
+      inputPlaceholderBlocked: "Chat is unavailable.",
+      locationNotSupported: "Location not supported.",
+      locationServicesDenied: "Location services denied.",
+      messageTimestampFormat: "HH:mm",
+      shareLocation: "Share location",
+      uploadDocument: "Upload document",
+      uploadPhoto: "Upload photo",
+      soundNotification: "Sound notification",
+      printTranscipt: "Print transcript",
+      startConversation: "Start conversation",
+      cancelConversation: "Cancel",
+      closeConversationConfirmationEndChat: "End chat?",
+      closeConversationConfirmationMessage: "Are you sure you want to end the chat?",
+      closeConversationConfirmationCancel: "Cancel",
+      welcomeHeader: "Welcome",
+      welcomeDescription: "How can we help you today?",
+      languageContinue: "Continue",
+      languageCancel: "Cancel",
+      conversationTerminated: "Conversation terminated.",
+      chatEndedMessage: "Chat ended.",
+      startNewChat: "Start new chat",
+      closeWindow: "Close window",
+      downloadTranscript: "Download transcript",
+      conversationCreated: "Conversation created.",
+      participantAccepted: "Agent joined.",
+      participantJoined: "Participant joined.",
+      participantLeft: "Participant left.",
+      transferredToParticipant: "Transferred to participant.",
+      transferredToGroup: "Transferred to group.",
+      name: "Name",
+      emailAddress: "Email"
+    };
+  </script>
 </head>
 <body>
-
-
-    <!-- 1. Header & Navigation -->
-    <header>
-        <h1>JR's Test Sandbox</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#ui-elements">UI Elements</a></li>
-                <li><a href="#data">Data</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-
-
-    <div class="container">
-        <!-- 2. Login Form -->
-        <section id="loginFormSection">
-            <h2>Login Form</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password">
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="rememberMe" name="rememberMe"> Remember Me
-                    </label>
-                </div>
-                <button type="submit" class="btn" id="loginButton">Login</button>
-            </form>
-        </section>
-
-        <!-- 3. Interactive UI Elements -->
-        <section id="uiElementsSection">
-            <h2>Interactive UI Elements</h2>
-            
-            <!-- Dropdown Menu -->
-            <div class="form-group">
-                <label for="dropdownMenu">Choose an Option:</label>
-                <select id="dropdownMenu" name="dropdownMenu">
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                    <option value="option4">Option 4</option>
-                </select>
-            </div>
-            
-            <!-- Hidden Text Toggle -->
-            <button id="toggleTextButton" class="btn btn-secondary">Toggle Hidden Text</button>
-            <div id="hiddenText">This is a hidden piece of text that can be revealed.</div>
-            
-            <!-- Modal Trigger -->
-            <button id="openModalButton" class="btn" style="margin-top: 15px;">Open Modal</button>
-        </section>
-
-        <!-- 4. Data Table -->
-        <section id="dataTableSection">
-            <h2>Data Table</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>101</td>
-                        <td>John</td>
-                        <td>Doe</td>
-                        <td>john.doe@example.com</td>
-                    </tr>
-                    <tr>
-                        <td>102</td>
-                        <td>Jane</td>
-                        <td>Smith</td>
-                        <td>jane.smith@example.com</td>
-                    </tr>
-                    <tr>
-                        <td>103</td>
-                        <td>Peter</td>
-                        <td>Jones</td>
-                        <td>peter.jones@example.com</td>
-                    </tr>
-                    <tr>
-                        <td>104</td>
-                        <td>Susan</td>
-                        <td>Williams</td>
-                        <td>susan.w@example.com</td>
-                    </tr>
-                    <tr>
-                        <td>105</td>
-                        <td>David</td>
-                        <td>Brown</td>
-                        <td>david.b@example.com</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- 5. Dynamic Content Section -->
-        <section id="dynamicContentSection">
-            <h2>Dynamic Content</h2>
-            <button id="fetchDataButton" class="btn">Fetch Data</button>
-            <div id="dynamicContentContainer">
-                <ul id="dynamicContentList">
-                    <!-- Items will be dynamically inserted here -->
-                </ul>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- 6. Footer -->
-    <footer>
-        <p>&copy; 2024 Test Automation Sandbox. All rights reserved.</p>
-    </footer>
-
-    <!-- Modal Structure -->
-    <div id="simpleModal" class="modal">
-        <div class="modal-content">
-            <span id="closeModalButton" class="close-btn">&times;</span>
-            <h3>Simple Modal</h3>
-            <p>This is a simple modal window. You can use it to test pop-up interactions.</p>
+  <header>
+    <h1>JR's Test Sandbox</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#ui-elements">UI Elements</a></li>
+        <li><a href="#data">Data</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    <section id="loginFormSection">
+      <h2>Login Form</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username">
         </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password">
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="rememberMe" name="rememberMe"> Remember Me
+          </label>
+        </div>
+        <button type="submit" class="btn" id="loginButton">Login</button>
+      </form>
+    </section>
+    <section id="uiElementsSection">
+      <h2>Interactive UI Elements</h2>
+      <div class="form-group">
+        <label for="dropdownMenu">Choose an Option:</label>
+        <select id="dropdownMenu" name="dropdownMenu">
+          <option value="option1">Option 1</option>
+          <option value="option2">Option 2</option>
+          <option value="option3">Option 3</option>
+          <option value="option4">Option 4</option>
+        </select>
+      </div>
+      <button id="toggleTextButton" class="btn btn-secondary">Toggle Hidden Text</button>
+      <div id="hiddenText">This is a hidden piece of text that can be revealed.</div>
+      <button id="openModalButton" class="btn" style="margin-top: 15px;">Open Modal</button>
+    </section>
+    <section id="dataTableSection">
+      <h2>Data Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>101</td><td>John</td><td>Doe</td><td>john.doe@example.com</td></tr>
+          <tr><td>102</td><td>Jane</td><td>Smith</td><td>jane.smith@example.com</td></tr>
+          <tr><td>103</td><td>Peter</td><td>Jones</td><td>peter.jones@example.com</td></tr>
+          <tr><td>104</td><td>Susan</td><td>Williams</td><td>susan.w@example.com</td></tr>
+          <tr><td>105</td><td>David</td><td>Brown</td><td>david.b@example.com</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="dynamicContentSection">
+      <h2>Dynamic Content</h2>
+      <button id="fetchDataButton" class="btn">Fetch Data</button>
+      <div id="dynamicContentContainer">
+        <ul id="dynamicContentList"></ul>
+      </div>
+    </section>
+  </div>
+  <footer>
+    <p>&copy; 2024 Test Automation Sandbox. All rights reserved.</p>
+  </footer>
+  <div id="simpleModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModalButton" class="close-btn">&times;</span>
+      <h3>Simple Modal</h3>
+      <p>This is a simple modal window. You can use it to test pop-up interactions.</p>
     </div>
-
-    <!-- JavaScript for interactivity -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // --- 2. Login Form ---
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', function(event) {
-                // Prevent form from actually submitting
-                event.preventDefault(); 
-                alert('Login button clicked!');
-            });
-
-            // --- 3. Interactive UI Elements ---
-            
-            // A. Toggle hidden text
-            const toggleButton = document.getElementById('toggleTextButton');
-            const hiddenText = document.getElementById('hiddenText');
-            toggleButton.addEventListener('click', function() {
-                if (hiddenText.style.display === 'none' || hiddenText.style.display === '') {
-                    hiddenText.style.display = 'block';
-                } else {
-                    hiddenText.style.display = 'none';
-                }
-            });
-
-            // B. Modal functionality
-            const modal = document.getElementById('simpleModal');
-            const openModalBtn = document.getElementById('openModalButton');
-            const closeModalBtn = document.getElementById('closeModalButton');
-
-            // Open the modal
-            openModalBtn.addEventListener('click', function() {
-                modal.style.display = 'block';
-            });
-
-            // Close the modal via the 'x' button
-            closeModalBtn.addEventListener('click', function() {
-                modal.style.display = 'none';
-            });
-            
-            // Close the modal by clicking outside of it
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-
-            // --- 5. Dynamic Content Section ---
-            const fetchDataButton = document.getElementById('fetchDataButton');
-            const dynamicList = document.getElementById('dynamicContentList');
-
-            fetchDataButton.addEventListener('click', function() {
-                // Clear existing items
-                dynamicList.innerHTML = ''; 
-
-                // Simulate fetching data (e.g., from an API)
-                const items = ['Dynamic Item 1', 'Dynamic Item 2', 'Dynamic Item 3', 'Dynamic Item 4'];
-                
-                // Create and append list items
-                items.forEach(function(itemText) {
-                    const li = document.createElement('li');
-                    li.textContent = itemText;
-                    dynamicList.appendChild(li);
-                });
-            });
-
+  </div>
+  <!-- Interactivity JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('loginForm');
+      loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        alert('Login button clicked!');
+      });
+      const toggleButton = document.getElementById('toggleTextButton');
+      const hiddenText = document.getElementById('hiddenText');
+      toggleButton.addEventListener('click', function() {
+        hiddenText.style.display =
+          (hiddenText.style.display === 'none' || hiddenText.style.display === '') ? 'block' : 'none';
+      });
+      const modal = document.getElementById('simpleModal');
+      const openModalBtn = document.getElementById('openModalButton');
+      const closeModalBtn = document.getElementById('closeModalButton');
+      openModalBtn.addEventListener('click', function() { modal.style.display = 'block'; });
+      closeModalBtn.addEventListener('click', function() { modal.style.display = 'none'; });
+      window.addEventListener('click', function(event) {
+        if (event.target === modal) modal.style.display = 'none';
+      });
+      const fetchDataButton = document.getElementById('fetchDataButton');
+      const dynamicList = document.getElementById('dynamicContentList');
+      fetchDataButton.addEventListener('click', function() {
+        dynamicList.innerHTML = '';
+        ['Dynamic Item 1', 'Dynamic Item 2', 'Dynamic Item 3', 'Dynamic Item 4'].forEach(function(itemText) {
+          const li = document.createElement('li');
+          li.textContent = itemText;
+          dynamicList.appendChild(li);
         });
-    </script>
-<script>
-  F9.Chat.Wrapper.init({
-    cdn: 'prod-eu',
-
-    messenger: {
-    integrationId: "14cca28b-cf64-464d-8a65-10e3b550e433",
-    chatDeploymentId: "88128dbf-e945-47a6-b12f-22872bee46aa"
-    }
-  });
-</script>
-
+      });
+    });
+  </script>
+  <!-- ========== Script 1 (as requested) ========== -->
+  <script>
+    window.loadFive9 = function loadFive9() {
+      function dec2hex(dec) { return dec.toString(16).padStart(2, "0"); }
+      function generateId(len) {
+        var arr = new Uint8Array((len || 40) / 2);
+        window.crypto.getRandomValues(arr);
+        return Array.from(arr, dec2hex).join('');
+      }
+      var companyCode = digitalData[0].data.pageInfo.companyCode;
+      console.log("Five9 Sandbox: companyCode=", companyCode, "language=", digitalData[0].data.pageInfo.language);
+      if (companyCode != "" && digitalData[0].data.pageInfo.language != "") {
+        var partnerCompanySalesGroup = digitalData[0].data.pageInfo.partnerCompanySalesGroup;
+        var partnerCompanyNielsenID = digitalData[0].data.pageInfo.partnerCompanyNielsenId;
+        var partnerCompanySalesOffice = digitalData[0].data.pageInfo.partnerCompanySalesOffice;
+        var partnerCompanyDivision = digitalData[0].data.pageInfo.partnerCompanyDivision;
+        if (!sessionStorage.getItem("chatBot_userSession_id")) {
+          sessionStorage.setItem("chatBot_userSession_id", _satellite.getVar("aa_custvid_mcdID") + generateId(16));
+        }
+        window.chatBot_userSession_id = sessionStorage.getItem("chatBot_userSession_id");
+        if (companyCode == "GPU" || companyCode == "GCB") companyCode = "GCB_GPU";
+        if (partnerCompanySalesGroup == "") partnerCompanySalesGroup = "Default";
+        if (partnerCompanyNielsenID == "") partnerCompanyNielsenID = "Default";
+        if (partnerCompanySalesOffice == "") partnerCompanySalesOffice = "Default";
+        if (partnerCompanyDivision == "") partnerCompanyDivision = "Default";
+        if (companyCode == "GPS" || companyCode == "GBL" || companyCode == "GCA") {
+          companyCode = companyCode + "_" + digitalData[0].data.pageInfo.language.toUpperCase();
+        }
+        console.log("Five9 Sandbox: initializing wrapper with integrationId under messenger...");
+        F9.Chat.Wrapper.init({
+          cdn: 'prod-eu',
+          useBusinessHours: false,
+          languages: { enabled: false, backgroundColor: "#126af3" },
+          l10n: {
+            en: {
+              messenger: {
+                customText: {
+                  formErrorInvalidEmail: window.CTF.FIVE9.formErrorInvalidEmail,
+                  headerText: window.CTF.FIVE9.headerText,
+                  inputPlaceholder: window.CTF.FIVE9.inputPlaceholder,
+                  inputPlaceholderBlocked: window.CTF.FIVE9.inputPlaceholderBlocked,
+                  locationNotSupported: window.CTF.FIVE9.locationNotSupported,
+                  locationServicesDenied: window.CTF.FIVE9.locationServicesDenied,
+                  messageTimestampFormat: window.CTF.FIVE9.messageTimestampFormat,
+                  shareLocation: window.CTF.FIVE9.shareLocation,
+                  uploadDocument: window.CTF.FIVE9.uploadDocument,
+                  uploadPhoto: window.CTF.FIVE9.uploadPhoto,
+                  soundNotification: window.CTF.FIVE9.soundNotification,
+                  printTranscipt: window.CTF.FIVE9.printTranscipt,
+                  startConversation: window.CTF.FIVE9.startConversation,
+                  cancelConversation: window.CTF.FIVE9.cancelConversation,
+                  closeConfirmationEndChat: window.CTF.FIVE9.closeConversationConfirmationEndChat,
+                  endChatconfirmationHeader: window.CTF.FIVE9.closeConversationConfirmationEndChat,
+                  closeConfirmationMessage: window.CTF.FIVE9.closeConversationConfirmationMessage,
+                  closeConfirmationCancel: window.CTF.FIVE9.closeConversationConfirmationCancel,
+                  welcomeHeader: window.CTF.FIVE9.welcomeHeader,
+                  welcomeDescription: window.CTF.FIVE9.welcomeDescription,
+                  languageContinue: window.CTF.FIVE9.languageContinue,
+                  languageCancel: window.CTF.FIVE9.languageCancel,
+                  conversationTerminated: window.CTF.FIVE9.conversationTerminated,
+                  chatEndedMessage: window.CTF.FIVE9.chatEndedMessage,
+                  startNewChat: window.CTF.FIVE9.startNewChat,
+                  closeWindow: window.CTF.FIVE9.closeWindow,
+                  downloadTranscript: window.CTF.FIVE9.downloadTranscript
+                }
+              },
+              systemMessages: {
+                conversationCreated: window.CTF.FIVE9.conversationCreated,
+                participantAccepted: window.CTF.FIVE9.participantAccepted,
+                participantJoined: window.CTF.FIVE9.participantJoined,
+                participantLeft: window.CTF.FIVE9.participantLeft,
+                transferredToParticipant: window.CTF.FIVE9.transferredToParticipant,
+                transferredToGroup: window.CTF.FIVE9.transferredToGroup,
+                conversationTerminated: window.CTF.FIVE9.conversationTerminated
+              },
+              captureFields: [
+                { k: "name", l: window.CTF.FIVE9.name, p: "" },
+                { k: "email", l: window.CTF.FIVE9.emailAddress, p: "" }
+              ]
+            }
+          },
+          prepopulatedFields: [
+            { k: "campaign", v: "Chat_" + companyCode },
+            { k: "chatBot.userSession.id", v: window.chatBot_userSession_id },
+            { k: "chatBot.companyCode", v: digitalData[0].data.pageInfo.companyCode },
+            { k: "chatBot.language", v: digitalData[0].data.pageInfo.language },
+            { k: "chatBot.partnerCompanyId", v: digitalData[0].data.pageInfo.partnerCompanyId },
+            { k: "chatBot.partnerCompanyName", v: digitalData[0].data.pageInfo.partnerCompanyName },
+            { k: "chatBot.partnerCompanyNielsenID", v: partnerCompanyNielsenID },
+            { k: "chatBot.partnerCompanySalesGroup", v: partnerCompanySalesGroup },
+            { k: "chatBot.partnerCompanySalesOffice", v: partnerCompanySalesOffice },
+            { k: "chatBot.partnerCompanyDivision", v: partnerCompanyDivision },
+            { k: "chatBot.Platform", v: digitalData[0].data.pageInfo.platform },
+            { k: "chatBot.siteCountry", v: digitalData[0].data.pageInfo.siteCountry },
+            { k: "chatBot.mcid", v: _satellite.getVar("aa_custvid_mcdID") },
+            { k: "chatBot.puid", v: digitalData[0].data.user.puid },
+            { k: "chatBot.websiteURL", v: window.location.href },
+            { k: "Question", v: "Hello" }
+          ],
+          messenger: {
+            integrationId: "14cca28b-cf64-464d-8a65-10e3b550e433",
+            chatDeploymentId: "88128dbf-e945-47a6-b12f-22872bee46aa",
+            soundNotificationEnabled: true,
+            transcriptPrintingEnabled: true,
+            menuItems: { imageUpload: true, fileUpload: true, shareLocation: true },
+            embedded: false,
+            setViewportScale: false,
+            browserStorage: "localStorage",
+            fixedHeader: false,
+            displayStyle: "button",
+            customColors: { brandColor: "126af3", conversationColor: "126AF3", actionColor: "126AF3" },
+            carouselType: "default"
+          },
+          clearMessagesTimeout: 3
+        });
+      } else {
+        console.warn("Five9 not initialized: companyCode or language is empty.");
+      }
+    };
+    // Launch safely after page load & wrapper availability
+    window.addEventListener("DOMContentLoaded", function () {
+      if (window.F9 && window.F9.Chat && window.F9.Chat.Wrapper && typeof window.F9.Chat.Wrapper.init === "function") {
+        window.loadFive9();
+      } else {
+        console.error("Five9 wrapper library not ready. Check if index.js loaded successfully.");
+      }
+    });
+  </script>
 </body>
 </html>
